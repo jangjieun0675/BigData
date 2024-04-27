@@ -34,14 +34,12 @@ sns.countplot(x='pclass', hue = 'survived', data = titanic)
 plt.title('Pclass vs Survived')
 plt.show()
 
-titanic_corr = titanic.corr(method = 'pearson')
+titanic_corr = titanic.corr(method = 'pearson', numeric_only=1)
 titanic_corr
 titanic_corr.to_csv('DATA/titanic_corr.csv', index = False)
 
 titanic['survived'].corr(titanic['adult_male'])
 titanic['survived'].corr(titanic['fare'])
-sns.pairplot(titanic, hue = 'survived')
-plt.show()
 sns.pairplot(titanic, hue = 'survived')
 plt.show()
 sns.catplot(x = 'pclass', y = 'survived', hue = 'sex', data = titanic, kind = 'point')
