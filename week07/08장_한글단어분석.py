@@ -37,12 +37,14 @@ data #출력하여 내용 확인
 
 # In[3]:
 
+# 항목에 ‘message’ 키가 있는지 확인하고, 있다면 ‘message’ 키의 값을 문자열 message에 추가
 
 message = ''
 
 for item in data:
     if 'message' in item.keys(): 
         message = message + re.sub(r'[^\w]', ' ', item['message']) +''
+        # 비 알파벳 문자를 공백으로 대체
         
 message #출력하여 내용 확인
 
@@ -52,8 +54,8 @@ message #출력하여 내용 확인
 # In[4]:
 
 
-nlp = Okt()
-message_N = nlp.nouns(message)
+nlp = Okt() #객체 생성 후
+message_N = nlp.nouns(message) #message에서 명사만 추출
 message_N   #출력하여 내용 확인
 
 
@@ -64,7 +66,7 @@ message_N   #출력하여 내용 확인
 # In[5]:
 
 
-count = Counter(message_N)
+count = Counter(message_N)# 각 명사의 빈도를 계산
 
 count   #출력하여 내용 확인
 
@@ -73,7 +75,7 @@ count   #출력하여 내용 확인
 
 
 word_count = dict()
-
+# 가장 빈번하게 등장하는 단어를 추출
 for tag, counts in count.most_common(80):
     if(len(str(tag))>1):
         word_count[tag] = counts
@@ -84,7 +86,7 @@ for tag, counts in count.most_common(80):
 
 # In[7]:
 
-
+# 단어 빈도에 대한 히스토그램을 생성
 font_path = "c:/Windows/fonts/malgun.ttf"
 font_name = font_manager.FontProperties(fname = font_path).get_name()
 matplotlib.rc('font', family=font_name)
