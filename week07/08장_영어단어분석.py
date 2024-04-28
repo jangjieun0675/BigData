@@ -29,6 +29,7 @@ from wordcloud import WordCloud, STOPWORDS
 # ### 1-1. 파일 병합
 # ### - ☺데이터를 다운 받은 시점에 따라 검색결과가 달라지므로, 책에 있는 결과 화면과 다를수 있습니다.☺ -
 # In[2]:
+# 주어진 패턴에 일치하는 모든 경로명을 반환
 all_files = glob.glob('8장_data/myCabinetExcelData*.xls')
 all_files #출력하여 내용 확인
 
@@ -41,6 +42,8 @@ for file in all_files:
 all_files_data[0] #출력하여 내용 확인
 
 # In[4]:
+# 여러 데이터프레임을 하나로 결합
+#데이터프레임을 수직으로 결합하고, ignore_index=True 기존 인덱스를 무시하고 새로운 인덱스를 생성
 all_files_data_concat = pd.concat(all_files_data, axis=0, ignore_index=True)
 all_files_data_concat #출력하여 내용 확인
 
@@ -57,20 +60,20 @@ all_title #출력하여 내용 확인
 # import nltk
 # nltk.download('punkt')    # 해보고 안되면 다음 명령어 실행
 # nltk.download('all')      # 5분 이상 소요됨
-stopWords = set(stopwords.words("english"))
+stopWords = set(stopwords.words("english")) #영어에서 분석할 때 필요없는 단어를 빼냄
 lemma = WordNetLemmatizer()
 
 # In[8]:
-# 아래 2문장이 필요함 import nltk, nltk.download('omw-1.4')
+# 아래 2문장이 필요함 import nltk, nltk.download('omw-1.4'), nltk.download('stopwords')
 import nltk
-nltk.download('omw-1.4')
+nltk.download('omw-1.4') #영어단어를 다운받는다
 words = []  
 for title in all_title:
-    EnWords = re.sub(r"[^a-zA-Z]+", " ", str(title))    
-    EnWordsToken = word_tokenize(EnWords.lower())
-    EnWordsTokenStop = [w for w in EnWordsToken if w not in stopWords]
-    EnWordsTokenStopLemma = [lemma.lemmatize(w) for w in EnWordsTokenStop]
-    words.append(EnWordsTokenStopLemma)
+    EnWords = re.sub(r"[^a-zA-Z]+", " ", str(title))# 문자열에서 알파벳이 아닌 모든 문자를 공백으로 대체
+    EnWordsToken = word_tokenize(EnWords.lower())#소문자로 바꾼 뒤 토근화
+    EnWordsTokenStop = [w for w in EnWordsToken if w not in stopWords] #불용어를 제거
+    EnWordsTokenStopLemma = [lemma.lemmatize(w) for w in EnWordsTokenStop]# 기본 형태(원형)로 변환
+    words.append(EnWordsTokenStopLemma)# words에 키위드를 추가
 
 # In[9]:
 print(words)  #출력하여 내용 확인
@@ -82,7 +85,7 @@ print(words2)  #작업 내용 확인
 # # 2. 데이터 탐색
 # ## 2-1. 단어 빈도 탐색
 # In[11]:
-count = Counter(words2)
+count = Counter(words2) # 각 단어의 빈도를 계산
 count   #출력하여 내용 확인
 
 # In[12]:
@@ -138,7 +141,7 @@ plt.show()
 # In[17]:
 stopwords=set(STOPWORDS)
 wc=WordCloud(background_color='ivory', stopwords=stopwords, width=800, height=600)
-cloud=wc.generate_from_frequencies(word_count)
+cloud=wc.generate_from_frequencies(word_count) #단어 빈도에 따라 워드클라우드를 생성
 
 plt.figure(figsize=(8,8))
 plt.imshow(cloud)
