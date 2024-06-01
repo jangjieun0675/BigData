@@ -77,7 +77,7 @@ print('Mean_absolute_Error = ', mean_absolute_error(data['y'], prediction))
 print('Mean_Squared_Error = ', mean_squared_error(data['y'], prediction))
 print('r2_score = ', r2_score(data['y'], prediction))
 # Mean squared error의 제곱근 값을 구함
-print('RMSE = ', mean_squared_error(data['y'])**0.5, prediction)
+print('RMSE = ', mean_squared_error(prediction, data['y'])**0.5)
 import sklearn.metrics; dir(sklearn.metrics)
 # 위에서 만들어진 선형회귀 모델을 적용하여 선형회귀 값을 구해본다.
 # 그 값을 prediction에 할당한다.

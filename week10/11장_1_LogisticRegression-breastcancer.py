@@ -3,19 +3,23 @@ import pandas as pd
 
 from sklearn.datasets import load_breast_cancer
 b_cancer = load_breast_cancer()
-print(b_cancer.DESCR)
+print(b_cancer.DESCR) #데이터셋에 대한 설명
+
 b_cancer_df = pd.DataFrame(b_cancer.data, columns = b_cancer.feature_names)
+# 유방암 유무를 확인할 컬럼 추가
 b_cancer_df['diagnosis']= b_cancer.target
 b_cancer_df.head()
 print('유방암 진단 데이터셋 크기 : ', b_cancer_df.shape)
 b_cancer_df.info()
 
+# 피처로 사용할 데이터를 평균이 0, 분산이 1이 되는 정규 분포 형태로 맞춤
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 b_cancer_scaled = scaler.fit_transform(b_cancer.data)
 print(b_cancer.data[0])
 print(b_cancer_scaled[0])
 
+#로지스틱 회귀 분석
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 # X, Y 설정하기
@@ -26,9 +30,10 @@ lr_b_cancer = LogisticRegression()
 lr_b_cancer.fit(X_train, Y_train)
 Y_predict = lr_b_cancer.predict(X_test)
 
+#모델 분석
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
-confusion_matrix(Y_test, Y_predict)
+confusion_matrix(Y_test, Y_predict) #혼동행렬
 
 acccuracy = accuracy_score(Y_test, Y_predict)
 precision = precision_score(Y_test, Y_predict)
