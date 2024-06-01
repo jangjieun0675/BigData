@@ -38,8 +38,8 @@ boston_df.to_csv("./DATA/BostonHousing.csv", index=False)
 print('보스톤 주택 가격 데이터셋 크기 : ', boston_df.shape)
 
 # In[7]:
-boston_df.info()
-boston_df['CHAS']=boston_df['CHAS'].astype('int')
+boston_df.info() # 데이터 type 확인
+boston_df['CHAS']=boston_df['CHAS'].astype('int') #category 티입을 int형으로 변환
 boston_df['RAD']=boston_df['RAD'].astype('int')
 # ## 3) 분석 모델 구축
 # In[8]:
@@ -48,7 +48,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 
 # In[10]:
-# X, Y 분할하기
+# X, Y 분할하기 => 종속변수와 독립변수 분할
 Y = boston_df['PRICE']
 X = boston_df.drop(['PRICE'], axis=1, inplace=False)
 

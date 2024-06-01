@@ -16,11 +16,11 @@ import matplotlib.pyplot as plt
 matplotlib.style.use('ggplot')
 
 # 2차원 배열을 만들어 'data'라는 변수에 할당
-#data = {'x' : [150.0, 155, 160.0],
-#        'y' : [50, 58, 60]}
+data = {'x' : [150.0, 155, 160.0],
+        'y' : [50, 58, 60]}
 # 2차원 배열을 만들어 'data'라는 변수에 할당(키-몸무게)
-#data = {'x' : [156.5, 160.6, 169.5, 167.9, 154.8, 163.0],
-#        'y' : [51.7, 54.8, 62.3, 61.3, 49.8, 55.8]}
+data = {'x' : [156.5, 160.6, 169.5, 167.9, 154.8, 163.0],
+        'y' : [51.7, 54.8, 62.3, 61.3, 49.8, 55.8]}
 # 2차원 배열을 만들어 'data'라는 변수에 할당(토익점수, 10점만점 가정)
 data = {'x' : [4,6,7,7,8,10],
         'y' : [2,4,6,8,7,9]}
@@ -73,11 +73,11 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 # 결정계수 R값을 구함
 print('score = ', linear_regression.score(X = pd.DataFrame(data["x"]), y = data["y"]))
 # 실제값(data[y])과 회귀식 값(prediction)의 차이의 제곱을 구함
-print('Mean_absolute_Error = ', mean_absolute_error(prediction, data['y']))
-print('Mean_Squared_Error = ', mean_squared_error(prediction, data['y']))
-print('r2_score = ', r2_score(prediction, data['y']))
+print('Mean_absolute_Error = ', mean_absolute_error(data['y'], prediction))
+print('Mean_Squared_Error = ', mean_squared_error(data['y'], prediction))
+print('r2_score = ', r2_score(data['y'], prediction))
 # Mean squared error의 제곱근 값을 구함
-print('RMSE = ', mean_squared_error(prediction, data['y'])**0.5)
+print('RMSE = ', mean_squared_error(data['y'])**0.5, prediction)
 import sklearn.metrics; dir(sklearn.metrics)
 # 위에서 만들어진 선형회귀 모델을 적용하여 선형회귀 값을 구해본다.
 # 그 값을 prediction에 할당한다.
