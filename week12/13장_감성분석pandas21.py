@@ -138,7 +138,7 @@ print('감성 분석 정확도 : ', round(accuracy_score(nsmc_test_df['label'], 
 # ### 4-2) 새로운 텍스트에 대한 감성 예측
 
 #st = input('감성 분석할 문장입력 >> ')
-st="행복"
+st="오늘 날씨가 맑네요"
 
 # 0) 입력 텍스트에 대한 전처리 수행
 st = re.compile(r'[ㄱ-ㅣ가-힣]+').findall(st); print(st)
