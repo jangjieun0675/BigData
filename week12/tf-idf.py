@@ -13,7 +13,7 @@ vocab.sort()
 N = len(docs) # 총 문서의 수
 
 def tf(t, d):
-    return d.count(t)
+    return d.count(t) #문서 d의 단어 t 갯수
 
 def idf(t):
     df = 0
