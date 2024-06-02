@@ -15,7 +15,7 @@ import os
 #conda install -c conda-forge pydotplus
 tennis_data = pd.read_csv('playtennis.csv')
 tennis_data
-# 범주형 변수 변경
+# 범주형 변수 변경(인코딩)
 tennis_data.Outlook = tennis_data.Outlook.replace('Sunny', 0)
 tennis_data.Outlook = tennis_data.Outlook.replace('Overcast', 1)
 tennis_data.Outlook = tennis_data.Outlook.replace('Rain', 2)
