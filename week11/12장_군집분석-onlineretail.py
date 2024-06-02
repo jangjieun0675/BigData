@@ -10,7 +10,7 @@ retail_df = pd.read_excel('./DATA/Online_Retail.xlsx')
 retail_df.head()
 print('---- end...')
 
-# ### 2) 데이터 준비 및 탐색
+# ### 2) 데이터 준비 및 탐색(데이터 전처리 과정)
 retail_df.info()
 
 # 오류 데이터 정제
@@ -44,13 +44,14 @@ retail_df.head() #작업 확인용 출력
 
 # #### - 고객의 마지막 주문후 경과일(Elapsed Days), 주문횟수(Freq), 주문 총액(Total Amount) 구하기
 aggregations = {    
-    'InvoiceNo':'count',
-    'SaleAmount':'sum',
-    'InvoiceDate':'max'
+    'InvoiceNo':'count', #주문횟수
+    'SaleAmount':'sum', #총주문금액
+    'InvoiceDate':'max' #최근주문일자
 }
 
 customer_df = retail_df.groupby('CustomerID').agg(aggregations)
-customer_df = customer_df.reset_index()
+#CustomerID 인덱스에서 컬럼으로 옮기기!!!!
+customer_df = customer_df.reset_index() 
 
 customer_df.head()  #작업 확인용 출력
 
@@ -62,7 +63,7 @@ customer_df.head() #작업 확인용 출력
 import datetime 
 customer_df['ElapsedDays'] = datetime.datetime(2011,12,10) - customer_df['ElapsedDays']
 customer_df.head() #작업 확인용 출력
-
+#시간을 없애고 날짜를 정수로 바꿈
 customer_df['ElapsedDays'] = customer_df['ElapsedDays'].apply(lambda x: x.days+1)
 customer_df.head() #작업 확인용 출력
 
@@ -94,6 +95,7 @@ from sklearn.metrics import silhouette_score, silhouette_samples
 X_features = customer_df[['Freq_log', 'SaleAmount_log', 'ElapsedDays_log']].values
 
 # 정규 분포로 다시 스케일링하기
+# 피처로 사용할 데이터를 평균이 0, 분산이 1이 되는 정규 분포 형태로 맞춤
 from sklearn.preprocessing import StandardScaler
 X_features_scaled = StandardScaler().fit_transform(X_features)
 
