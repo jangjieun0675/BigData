@@ -12,7 +12,7 @@ import pandas as pd
 df = pd.DataFrame(data=iris['data'], columns = iris['feature_names'])
 df.to_excel('iris.xlsx', index=False)
 
-#training data 설정 
+#training data 설정 -> 잘못 설정한 예
 x_train = iris.data[:-30]
 y_train = iris.target[:-30]
 #test data 설정
@@ -45,13 +45,14 @@ print (y_test)
 print (Y_test)
 clf = RandomForestClassifier(n_estimators=10) # Random Forest
 clf.fit(X_train, Y_train)
-prediction_1 = rfc.predict(X_test)
+prediction_1 = clf.predict(X_test)
 #print (prediction_1 == Y_test)
 print ("Accuracy is : ",accuracy_score(prediction_1, Y_test))
 print ("=======================================================")
 print (classification_report(prediction_1, Y_test))
 
 # Initialize the model
+#트리 개수 200개
 clf_2 = RandomForestClassifier(n_estimators=200, # Number of trees
                                max_features=4,    # Num features considered
                                   oob_score=True)    # Use OOB scoring*
