@@ -12,10 +12,10 @@ print(newstr)
 
 from konlpy.tag import Okt #한국어 정보처리를 위한 파이썬 패키지
 okt = Okt() 
-tokens = okt.morphs(text)
+tokens = okt.morphs(newstr)
 print(tokens)
 # ['난', '우리', '영화', '를', '사랑', '합니다']
 
 #********* 명사 찾기 okt.noun()
 no=okt.nouns(newstr)
-print(no)
+print(no) #['난', '우리', '영화', '사랑']
