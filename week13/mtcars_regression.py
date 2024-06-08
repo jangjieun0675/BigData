@@ -18,25 +18,28 @@ print(data['cyl'].unique())
 
 print(data.info())
 
-print(data.corr())
-X=data.drop(columns='mpg')
-Y=data['mpg']
 
-# 필요없는 열 삭제 - 'Unnamed: 0' 자동차 이름
+#상관계수 출력 : 문자도 같이 계산하여 출력
+print(data.corr(numeric_only=True))
+
+# X, Y 분할하기 => 종속변수와 독립변수 분할
+X=data.drop(columns='mpg') #종족변수
+Y=data['mpg'] #독립변수
+
+# 필요없는 열 삭제 - 'Unnamed: 0' 자동차 이름(분석에 필요하지 않은 컬럼 제거)
 X=X.iloc[:, 1:]
+#X_0= X.pop("Unnamed: 0")
 
 # 결측치 확인 - 평균값으로 대치
-X.isnull()
 X.isnull().sum()
-X_cyl_mean=X['cyl'].mean()
-X['cyl']=X['cyl'].fillna(X_cyl_mean)
+X_cyl_mean=X['cyl'].mean() # cyl의 평균을 구함
+X['cyl']=X['cyl'].fillna(X_cyl_mean) #cyl의 null값을 cyl행의 평균으로 바꿈
 
-X.isnull()
 X.isnull().sum()
 X_cyl_median=X['qsec'].median()
 X['qsec']=X['qsec'].fillna(X_cyl_median)
 
-X=X.dropna()
+X=X.dropna() #결측값 있는 행 제거
 
 # 잘못된 값 바꾸기 '*3'->'3'
 print(X['gear'].unique())
