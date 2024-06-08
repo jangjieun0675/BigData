@@ -12,10 +12,13 @@ data=pd.read_csv('Ex_CEOSalary.csv', encoding='utf-8')
 data.info()
 # In[3]:데이터 위에서부터 10개 출력
 data.head(10)
+#컬럼 출력 -> 인덱스 형식
+print(data.columns)
 # ## 1-1. 범주형 자료의 탐색
 # In[4]:
 data['industry'].value_counts() #컬럼별 갯수
-data['industry'].count() # 총개수
+data['industry'].count() # 총개수==행 갯수
+print(data['industry'].unique())#값의 종류 출력
 #get_ipython().run_line_magic('matplotlib', 'inline') 컬럼별 그래프 그리기
 data['industry'].value_counts().plot(kind="pie")
 # In[7]:
@@ -26,8 +29,12 @@ data.hist(bins=50, figsize=(20,15)) # 히스토그램 그리기
 # In[13]:
 data['salary'].hist(bins=50, figsize=(5,5))# 컬럼별 히스토그램 그리기
 
-# In[9]: 갯수, 평균, 표준편차, 최소값, 최대값, 중간값(50%)
+#갯수, 평균, 표준편차, 최소값, 최대값, 중간값(50%), 시리즈 형태로 출력
 data.describe()
+
+#상관계수 출력 : 문자도 같이 계산하여 출력
+data=pd.read_csv("mtcars.csv")
+print(data.corr(numeric_only=True))
 
 #그룹화 : groupby
 #SELECT industry,

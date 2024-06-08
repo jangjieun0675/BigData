@@ -21,6 +21,11 @@ Y = pd.read_csv("YY_train.csv")
 # X_train 정보 확인 후 
 X.info()
 
+#만약 종속변수와 독립변수를 나눠야 한다면
+#Y=X['Warehouse_block'] #종족변수
+#X=X.drop(columns='Warehouse_block') #독립변수
+
+
 # 분석에 필요하지 않은 컬럼 제거 => ID 항목 제거
 X_ID = X.pop("ID")
 Y_ID = Y.pop("ID")
