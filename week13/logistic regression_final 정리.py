@@ -42,7 +42,6 @@ X_scaled = scaler.fit_transform(X)
 # train-test 검증 데이터 분리(split) 20%
 X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y['Target'], test_size=0.2, random_state=0)
 
-
 # Logistic Regression 모델 생성 및 학습
 log_reg = LogisticRegression()
 log_reg.fit(X_train, Y_train)
