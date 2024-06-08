@@ -37,6 +37,7 @@ X['Mode_of_Shipment'] = label_enc.fit_transform(X['Mode_of_Shipment'])
 X['Product_importance'] = label_enc.fit_transform(X['Product_importance'])
 X['Gender'] = label_enc.fit_transform(X['Gender'])
 
+#원 핫 인코딩
 #categorical_cols = ['Warehouse_block', 'Mode_of_Shipment', 'Product_importance', 'Gender']
 #X = pd.get_dummies(X, columns=categorical_cols, drop_first=True)
 
