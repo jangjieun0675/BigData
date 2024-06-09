@@ -16,7 +16,7 @@ Y=data['mpg'] #독립변수
 X=X.iloc[:, 1:]
 #X_0= X.pop("Unnamed: 0")
 
-# 결측치 확인 - 평균값으로 대치
+# 결측치(null)  확인 - 평균값으로 대치
 X.isnull().sum()
 X_cyl_mean=X['cyl'].mean() # cyl의 평균을 구함
 X['cyl']=X['cyl'].fillna(X_cyl_mean) #cyl의 null값을 cyl행의 평균으로 바꿈
@@ -25,7 +25,7 @@ X.isnull().sum()
 X_cyl_median=X['qsec'].median()
 X['qsec']=X['qsec'].fillna(X_cyl_median)
 
-X=X.dropna() #또는 아예 결측값 있는 행 제거
+X=X.dropna() #또는 아예 결측값(null) 있는 행 제거
 
 # 잘못된 값 바꾸기 '*3'->'3'
 print(X['gear'].unique())
