@@ -1,10 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
+#LogisticRegression_이진분류 -> X 값은 숫자 데이터, Y값 0과1
 
-# Y값이 0과 1로 구분되면 -> LogisticRegression(이진분류)
-# Y값이 숫자(ex 키, 몸무게)이면 -> LinearRegression(선형회귀)
-# Y값이 1,2,3 -> classification(분류)
-# Y값이 없으면 -> cluster analysis(군집분석)
+# Y값이 0과 1로 구분되면 -> LogisticRegression(이진분류) -> 출력 값이 0 또는 1인 두 가지 범주 중 하나에 속하는 경우
+# Y값이 숫자(ex 키, 몸무게)이면 -> LinearRegression(선형회귀) -> 사람의 키나 몸무게와 같은 연속적인 값을 예측하는 경우
+# Y값이 1,2,3 -> classification(분류) -> 고양이, 개, 또는 새 중 어떤 것을 나타내는지 예측하는 경우
+# Y값이 없으면 -> cluster analysis(군집분석)->레이블이 없는 데이터를 비슷한 특성(비지도학습)
 
 # 분류분석 중 이진 분류( logistic regression )
 # 오차 행렬에 기반한 성능 지표인 정밀도, 재현율, F1 스코어, ROC_AUC를 사용
