@@ -51,7 +51,9 @@ print('ROC_AUC: {0:f}'.format(roc_auc))
 
 # (2) RandomForest
 from sklearn.ensemble import RandomForestClassifier
-model=RandomForestClassifier()
+model=RandomForestClassifier(n_estimators=100, # Number of trees
+                               max_depth=4,    # Num features considered
+                                  oob_score=True)
 model.fit(x_train, y_train)
 y_test_predicted=model.predict(x_test)
 

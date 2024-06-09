@@ -11,14 +11,17 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
+
 
 X = pd.read_csv("XX_train.csv")
 Y = pd.read_csv("YY_train.csv")
 
 # X_train 정보 확인 후 
 X.info()
+X.Warehouse_block.value_counts() #어떤 항목이 몇개 있는지 확인
 
 #만약 종속변수와 독립변수를 나눠야 한다면
 #Y=X['Warehouse_block'] #종족변수
@@ -27,6 +30,9 @@ X.info()
 # 분석에 필요하지 않은 컬럼 제거 => ID 항목 제거
 X_ID = X.pop("ID")
 Y_ID = Y.pop("ID")
+#ID=X["ID"]
+#X=X.drop(columns='ID')
+#Y=Y.drop(columns='ID')
 
 # =============================================================================
 # 라벨 인코딩 - 명목형 변수 => LabelEncoding(), get_dummies() 
@@ -39,29 +45,58 @@ X['Gender'] = label_enc.fit_transform(X['Gender'])
 #원 핫 인코딩
 #categorical_cols = ['Warehouse_block', 'Mode_of_Shipment', 'Product_importance', 'Gender']
 #X = pd.get_dummies(X, columns=categorical_cols, drop_first=True)
+#X = pd.get_dummies(X, drop_first=True) #전체 데이터에 인코딩 적용
 
 # =============================================================================
 # 피처로 사용할 데이터를 평균이 0, 분산이 1이 되는 정규 분포 형태로 맞춤
+#(1) StandardScaler
+from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
 # =============================================================================
+# #(2)minmaxscaling
+# from sklearn.preprocessing import MinMaxScaler
+# scaler = MinMaxScaler()
+# X_scaled = scaler.fit_transform(X)
+# =============================================================================
+#테스트 데이터가 주어지면!!!!!
+X_test = pd.read_csv("X_test.csv")
+X_test_ID = X_test.pop("ID")
+X_test = pd.get_dummies(X_test, drop_first=True)
+X_test = scaler.transform(X_test) ###주의
+
 # train-test 검증 데이터 분리(split) 20%
 X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y['Target'], test_size=0.2, random_state=0)
-
-# Logistic Regression 모델 생성 및 학습
-log_reg = LogisticRegression()
-log_reg.fit(X_train, Y_train)
-
+# =============================================================================
+#(1) Logistic Regression 모델 생성 및 학습
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression(random_state=10)
+# =============================================================================
+# (2) DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier
+model=DecisionTreeClassifier(max_depth=5, random_state=10)
+# =============================================================================
+# (3) RandomForest
+from sklearn.ensemble import RandomForestClassifier
+model=RandomForestClassifier(n_estimators=200, # Number of trees
+                               max_depth=5,    # Num features considered
+                                  oob_score=True)
 # =============================================================================
 
+model.fit(X_train, Y_train) # 내가 직접 데이터를 분리했다면 이거
+Y_predict=model.predict(X_test)
+
+# X 테스트 데이터가 주어지면!!!!!!!
+X_val, X_te, Y_val, Y_te = train_test_split(X_scaled, Y, test_size=0.2, random_state=0) #!!!!!!
+model.fit(X_val, Y_val['Target']) #!!!!
+Y_predict=model.predict(X_te)
+acccuracy = accuracy_score(Y_te, Y_predict)
+print(acccuracy)
+
+
 #모델 분석
-from sklearn.metrics import confusion_matrix, accuracy_score
-from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
-
-# 검증용 데이터에 대한 예측
-Y_predict = log_reg.predict(X_test)
-
+# 내가 직접 데이터를 분리했다면 이거
 confusion_matrix(Y_test, Y_predict) #혼동행렬(실제값, 예측값)
 
 acccuracy = accuracy_score(Y_test, Y_predict) # 정확도
@@ -77,33 +112,32 @@ print('ROC_AUC: {0:.3f}'.format(roc_auc))
 
 #<<예측하기>>
 #
-# new_data = pd.DataFrame({
-#     'Warehouse_block': ['B'],
-#     'Mode_of_Shipment': ['Flight'],
-#     'Customer_care_calls': [5],
-#     'Customer_rating': [2],
-#     'Cost_of_the_Product': [164],
-#     'Prior_purchases': [4],
-#     'Product_importance': ['high'],
-#     'Gender': ['F'],
-#     'Discount_offered': [16],
-#     'Weight_in_gms': [3759]
-# })
+new_data = pd.DataFrame({
+     'Warehouse_block': ['B'],
+     'Mode_of_Shipment': ['Flight'],
+     'Customer_care_calls': [5],
+     'Customer_rating': [2],
+     'Cost_of_the_Product': [164],
+     'Prior_purchases': [4],
+     'Product_importance': ['high'],
+     'Gender': ['F'],
+     'Discount_offered': [16],
+     'Weight_in_gms': [3759]
+ }) 
+ 
+ # 각 명목형 변수에 대해 기존의 LabelEncoder를 사용하여 변환
+new_data['Warehouse_block'] = label_enc.fit_transform(new_data['Warehouse_block'])
+new_data['Mode_of_Shipment'] = label_enc.fit_transform(new_data['Mode_of_Shipment'])
+new_data['Product_importance'] = label_enc.fit_transform(new_data['Product_importance'])
+new_data['Gender'] = label_enc.fit_transform(new_data['Gender'])
 # 
-# 
-# # 각 명목형 변수에 대해 기존의 LabelEncoder를 사용하여 변환
-# new_data['Warehouse_block'] = label_enc.fit_transform(new_data['Warehouse_block'])
-# new_data['Mode_of_Shipment'] = label_enc.fit_transform(new_data['Mode_of_Shipment'])
-# new_data['Product_importance'] = label_enc.fit_transform(new_data['Product_importance'])
-# new_data['Gender'] = label_enc.fit_transform(new_data['Gender'])
-# 
-# # 기존에 학습된 StandardScaler를 사용하여 새로운 데이터도 스케일링
-# new_data_scaled = scaler.fit_transform(new_data)
+# 기존에 학습된 StandardScaler를 사용하여 새로운 데이터도 스케일링
+new_data_scaled = scaler.fit_transform(new_data)
 # 
 # # 새로운 데이터 예측
-# new_prediction = log_reg.predict(new_data_scaled)
+new_prediction = model.predict(new_data_scaled)
 # 
-# print("새로운 데이터 예측 결과:", new_prediction)
+print("새로운 데이터 예측 결과:", new_prediction)
 # =============================================================================
 
 

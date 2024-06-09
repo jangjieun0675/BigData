@@ -57,7 +57,6 @@ X['gear']=X['gear'].astype('object')
 from sklearn.preprocessing import LabelEncoder
 encoder=LabelEncoder() 
 X['am'] = encoder.fit_transform(X['am'])
-#X = encoder.fit_transform(X) #전체데이터 Label Encoding
 
 # (2) 인코딩 - One-Hot Encoding
 #X['am'] = pd.get_dummies(X['am'])
