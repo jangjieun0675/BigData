@@ -24,11 +24,11 @@ X.info()
 #Y=X['Warehouse_block'] #종족변수
 #X=X.drop(columns='Warehouse_block') #독립변수
 
-
 # 분석에 필요하지 않은 컬럼 제거 => ID 항목 제거
 X_ID = X.pop("ID")
 Y_ID = Y.pop("ID")
 
+# =============================================================================
 # 라벨 인코딩 - 명목형 변수 => LabelEncoding(), get_dummies() 
 label_enc = LabelEncoder()
 X['Warehouse_block'] = label_enc.fit_transform(X['Warehouse_block'])
@@ -40,10 +40,12 @@ X['Gender'] = label_enc.fit_transform(X['Gender'])
 #categorical_cols = ['Warehouse_block', 'Mode_of_Shipment', 'Product_importance', 'Gender']
 #X = pd.get_dummies(X, columns=categorical_cols, drop_first=True)
 
+# =============================================================================
 # 피처로 사용할 데이터를 평균이 0, 분산이 1이 되는 정규 분포 형태로 맞춤
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
+# =============================================================================
 # train-test 검증 데이터 분리(split) 20%
 X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y['Target'], test_size=0.2, random_state=0)
 
@@ -51,6 +53,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y['Target'], test_
 log_reg = LogisticRegression()
 log_reg.fit(X_train, Y_train)
 
+# =============================================================================
 
 #모델 분석
 from sklearn.metrics import confusion_matrix, accuracy_score
@@ -69,7 +72,92 @@ roc_auc = roc_auc_score(Y_test, Y_predict)
 
 print('정확도: {0:.3f}, 정밀도: {1:.3f}, 재현율: {2:.3f},  F1: {3:.3f}'.format(acccuracy,precision,recall,f1))
 print('ROC_AUC: {0:.3f}'.format(roc_auc))
+#1에 가까울수록 좋음
+# =============================================================================
 
+#<<예측하기>>
+#
+# new_data = pd.DataFrame({
+#     'Warehouse_block': ['B'],
+#     'Mode_of_Shipment': ['Flight'],
+#     'Customer_care_calls': [5],
+#     'Customer_rating': [2],
+#     'Cost_of_the_Product': [164],
+#     'Prior_purchases': [4],
+#     'Product_importance': ['high'],
+#     'Gender': ['F'],
+#     'Discount_offered': [16],
+#     'Weight_in_gms': [3759]
+# })
+# 
+# 
+# # 각 명목형 변수에 대해 기존의 LabelEncoder를 사용하여 변환
+# new_data['Warehouse_block'] = label_enc.fit_transform(new_data['Warehouse_block'])
+# new_data['Mode_of_Shipment'] = label_enc.fit_transform(new_data['Mode_of_Shipment'])
+# new_data['Product_importance'] = label_enc.fit_transform(new_data['Product_importance'])
+# new_data['Gender'] = label_enc.fit_transform(new_data['Gender'])
+# 
+# # 기존에 학습된 StandardScaler를 사용하여 새로운 데이터도 스케일링
+# new_data_scaled = scaler.fit_transform(new_data)
+# 
+# # 새로운 데이터 예측
+# new_prediction = log_reg.predict(new_data_scaled)
+# 
+# print("새로운 데이터 예측 결과:", new_prediction)
+# =============================================================================
+
+
+# =============================================================================
+# #예시1) 로지스틱 회귀 분석( 유방암 진단 )
+# import numpy as np
+# import pandas as pd
+# 
+# from sklearn.datasets import load_breast_cancer
+# b_cancer = load_breast_cancer()
+# print(b_cancer.DESCR) #데이터셋에 대한 설명
+# 
+# b_cancer_df = pd.DataFrame(b_cancer.data, columns = b_cancer.feature_names)
+# # 유방암 유무를 확인할 컬럼 추가
+# b_cancer_df['diagnosis']= b_cancer.target
+# b_cancer_df.head()
+# print('유방암 진단 데이터셋 크기 : ', b_cancer_df.shape)
+# b_cancer_df.info()
+# 
+# # 피처로 사용할 데이터를 평균이 0, 분산이 1이 되는 정규 분포 형태로 맞춤
+# from sklearn.preprocessing import StandardScaler
+# scaler = StandardScaler()
+# b_cancer_scaled = scaler.fit_transform(b_cancer.data)
+# print(b_cancer.data[0])
+# print(b_cancer_scaled[0])
+# 
+# #로지스틱 회귀 분석
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.model_selection import train_test_split
+# # X, Y 설정하기
+# Y = b_cancer_df['diagnosis']
+# X = b_cancer_scaled 
+# X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+# lr_b_cancer = LogisticRegression()
+# lr_b_cancer.fit(X_train, Y_train)
+# Y_predict = lr_b_cancer.predict(X_test)
+# 
+# #모델 분석
+# from sklearn.metrics import confusion_matrix, accuracy_score
+# from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
+# confusion_matrix(Y_test, Y_predict) #혼동행렬(실제값, 예측값)
+# 
+# acccuracy = accuracy_score(Y_test, Y_predict)
+# precision = precision_score(Y_test, Y_predict)
+# recall = recall_score(Y_test, Y_predict)
+# f1 = f1_score(Y_test, Y_predict)
+# roc_auc = roc_auc_score(Y_test, Y_predict)
+# 
+# print('정확도: {0:.3f}, 정밀도: {1:.3f}, 재현율: {2:.3f},  F1: {3:.3f}'.format(acccuracy,precision,recall,f1))
+# print('ROC_AUC: {0:.3f}'.format(roc_auc))
+# =============================================================================
+
+
+# =============================================================================
 #오차 행렬( 혼동행렬, Confusion Matrix )
 # 각 지표 계산하는 식
 # 정확도(Accuracy) : (TP + TN)/(TP + TN + FP + FN)
