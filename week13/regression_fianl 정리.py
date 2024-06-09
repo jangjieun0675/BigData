@@ -92,6 +92,16 @@ y_train_predicted=model.predict(x_train)
 y_test_predicted=model.predict(x_test)
 
 # ## 4) 결과 분석
+# residuals 계산
+residuals = y_test - y_predict
+# SSE 계산
+SSE = (residuals**2).sum()
+# SST 계산
+SST = ((y_test - y_test.mean())**2).sum()
+# R_squared 계산
+R_squared = 1 - (SSE/SST)
+print('R_squared: ', R_squared) # 1에 가까울수록 모델이 데이터를 잘 설명
+
 # RSME
 from sklearn.metrics import r2_score
 #print('r2_score =  : ',r2_score(y_train, y_train_predicted)) #훈련 데이터에 대한 모델의 성능
