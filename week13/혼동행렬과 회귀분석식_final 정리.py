@@ -1,8 +1,8 @@
 # 혼동 행렬을 보고 분석하기
-TN = 50  # True Negative
-FP = 10  # False Positive
-FN = 5   # False Negative
-TP = 100 # True Positive
+TN = 2  # True Negative
+FP = 1  # False Positive
+FN = 0   # False Negative
+TP = 3 # True Positive
 
 # 정확도 계산
 accuracy = (TP + TN) / (TP + TN + FP + FN)
