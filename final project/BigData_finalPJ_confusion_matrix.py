@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.linear_model import LogisticRegression
@@ -37,15 +37,17 @@ data['발생시간'] = data['발생시간'].apply(time_to_minutes)
 X = data[features]
 y = data['발생원인']
 
-# 범주형 데이터 인코딩
+# 범주형 데이터 인코딩 및 스케일링 설정
 categorical_features = ['발생장소_시도']
 categorical_transformer = OneHotEncoder()
+numerical_features = ['발생연도', '발생월', '발생시간', '피해면적']
+numerical_transformer = StandardScaler()
 
 preprocessor = ColumnTransformer(
     transformers=[
-        ('cat', categorical_transformer, categorical_features)
-    ],
-    remainder='passthrough'
+        ('cat', categorical_transformer, categorical_features),
+        ('num', numerical_transformer, numerical_features)
+    ]
 )
 
 # 데이터 전처리
